@@ -1,9 +1,12 @@
 package ru.netology.servlet;
 
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import ru.netology.controller.PostController;
 import ru.netology.repository.PostRepository;
 import ru.netology.service.PostService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,10 +20,9 @@ public class MainServlet extends HttpServlet {
   private static final String API_POSTS_ID_REGEX = "/api/posts/\\d+";
 
   @Override
-  public void init() {
-    final var repository = new PostRepository();
-    final var service = new PostService(repository);
-    controller = new PostController(service);
+  public void init(ServletConfig config) {
+    WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
+    controller = context.getBean(PostController.class);
   }
 
   @Override
